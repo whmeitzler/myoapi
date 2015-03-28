@@ -16,6 +16,7 @@
 package org.thingml.bglib.gui;
 
 import gnu.io.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -24,7 +25,9 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.JOptionPane;
+
 import org.thingml.bglib.BGAPITransport;
 
 /**
