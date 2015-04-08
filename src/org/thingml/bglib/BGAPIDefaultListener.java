@@ -91,10 +91,7 @@ public class BGAPIDefaultListener implements BGAPIListener {
 	public void receive_attclient_group_found(int connection, int start, int end, byte[] uuid) {}
 	public void receive_attclient_attribute_found(int connection, int chrdecl, int value, int properties, byte[] uuid) {}
 	public void receive_attclient_find_information_found(int connection, int chrhandle, byte[] uuid) {}
-	public void receive_attclient_attribute_value(int connection, int atthandle, int type, byte[] value) {
-        
-            
-        }
+	public void receive_attclient_attribute_value(int connection, int atthandle, int type, byte[] value) {}
 	public void receive_attclient_read_multiple_response(int connection, byte[] handles) {}
 
 	// Callbacks for class sm (index = 5)
