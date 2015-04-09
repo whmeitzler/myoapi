@@ -70,6 +70,7 @@ class BLEConnectionListener implements BGAPIListener{
 		}
 	}
 	public void receive_attclient_attribute_found(int connection, int chrdecl, int value, int properties, byte[] uuid) {}
+	//TODO Check this UUID against Control Command UUID
 	public void receive_attclient_find_information_found(int connection, int chrhandle, byte[] uuid) {
 		if (discovery_state == ATTRIBUTES && discovery_srv != null) {
 			BLEAttribute att = new BLEAttribute(uuid, chrhandle);

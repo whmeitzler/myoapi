@@ -1,12 +1,16 @@
 package edu.olivet.myoApi;
+import com.thalmic.myo.GattConstants;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.thingml.bglib.BDAddr;
 import org.thingml.bglib.BGAPI;
+import org.thingml.bglib.BGAPIPacket;
 
 import com.thalmic.myo.Arm;
 import com.thalmic.myo.BleGattCallback;
+import com.thalmic.myo.ControlCommand;
 import com.thalmic.myo.DeviceListener;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.XDirection;
@@ -18,6 +22,7 @@ public class MyoDevice extends BleGattCallback{
 	public static enum ConnectionState{CONNECTED, CONNECTING, DISCONNECTED};
 	//BlueTooth connections
 	private BGAPI bgapi;
+	int connection;
 	//Listeners
 	private ArrayList<DeviceListener> listeners;
 	//Myo status
@@ -31,11 +36,12 @@ public class MyoDevice extends BleGattCallback{
 	private boolean mUnlocked;
 	private Pose mUnlockPose = Pose.UNKNOWN;
 
-	public MyoDevice(BGAPI bgapi, BDAddr address){
+	public MyoDevice(BGAPI bgapi, BDAddr address, int BGAPIConnection){
 		if(bgapi != null)
 			this.bgapi = bgapi;
 		this.listeners = new ArrayList<DeviceListener>();
 		this.mAddress = address;
+		this.connection = BGAPIConnection;
 	}
 
 	public void addListner(DeviceListener listener){
@@ -90,4 +96,36 @@ public class MyoDevice extends BleGattCallback{
 	void setCurrentPose(Pose pose) {
 		this.mCurrentPose = pose;
 	}
+	  public void configureDataAcquisition(String address, ControlCommand.EmgMode streamEmg, boolean streamImu, boolean enableClassifier)
+	  {
+	    byte[] enableCommand = ControlCommand.createForSetMode(streamEmg, streamImu, enableClassifier);
+	    
+	    writeControlCommand(address, enableCommand);
+	  }
+	  
+	  public void requestRssi(String address) {
+	    this.mBleManager.getBleGatt().readRemoteRssi(address);
+	  }
+	  
+	  public void vibrate(VibrationType vibrationType) {
+	    byte[] vibrateCommand = ControlCommand.createForVibrate(vibrationType);
+	    writeControlCommand(vibrateCommand);
+	  }
+	  
+	  public void unlock(UnlockType unlockType) {
+	    byte[] unlockCommand = ControlCommand.createForUnlock(unlockType);
+	    writeControlCommand(unlockCommand);
+	  }
+	  
+	  public void notifyUserAction() {
+	    byte[] command = ControlCommand.createForUserAction();
+	    writeControlCommand(this.mAddress.toString(), command);
+	  }
+	  
+	  private void writeControlCommand(byte[] controlCommand) {
+	    UUID serviceUuid = GattConstants.CONTROL_SERVICE_UUID;
+	    UUID charUuid = GattConstants.COMMAND_CHAR_UUID;
+	    BGAPIPacket packet = new BGAPIPacket(controlCommand);
+	    this.mBleManager.getBleGatt().writeCharacteristic(address, serviceUuid, charUuid, controlCommand);
+	  }
 }

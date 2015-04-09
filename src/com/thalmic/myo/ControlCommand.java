@@ -2,7 +2,7 @@ package com.thalmic.myo;
 
 import edu.olivet.myoApi.MyoDevice;
 
-abstract class ControlCommand { private static final byte COMMAND_SET_MODE = 1;
+public abstract class ControlCommand { private static final byte COMMAND_SET_MODE = 1;
   private static final byte COMMAND_VIBRATION = 3;
   private static final byte COMMAND_UNLOCK = 10;
   private static final byte COMMAND_USER_ACTION = 11;
@@ -109,7 +109,7 @@ abstract class ControlCommand { private static final byte COMMAND_SET_MODE = 1;
     return controlCommand;
   }
   
-  static byte[] createForVibrate(MyoDevice.VibrationType vibrationType) {
+  public static byte[] createForVibrate(MyoDevice.VibrationType vibrationType) {
     byte[] command = new byte[Vibration.values().length];
     
     command[Vibration.COMMAND_TYPE.ordinal()] = 3;
@@ -131,7 +131,7 @@ abstract class ControlCommand { private static final byte COMMAND_SET_MODE = 1;
     return 0;
   }
   
-  static byte[] createForUnlock(MyoDevice.UnlockType unlockType)
+  public static byte[] createForUnlock(MyoDevice.UnlockType unlockType)
   {
     byte[] command = new byte[Unlock.values().length];
     
@@ -158,7 +158,7 @@ abstract class ControlCommand { private static final byte COMMAND_SET_MODE = 1;
     throw new IllegalArgumentException("Unknown UnlockType: " + unlockType);
   }
 
-  static byte[] createForUserAction()
+  public static byte[] createForUserAction()
   {
     byte[] command = new byte[Unlock.values().length];
     

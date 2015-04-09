@@ -12,6 +12,7 @@ public class BLEMyoListener extends BGAPIDefaultListener {
 	
 	public void receive_attclient_attribute_value(int connection, int atthandle, int type, byte[] value) {}
 	
+	public void receive_connection_get_rssi(int connection, int rssi) {}
 	/*Receives BGAPI calls and forwards them to associated MyoDevice
 	 * Provides the following functionality to the MyoDevice
 	 *   public void onDeviceConnectionFailed(Address address) {}
