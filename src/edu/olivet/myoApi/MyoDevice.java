@@ -100,7 +100,7 @@ public class MyoDevice extends BleGattCallback{
 	  {
 	    byte[] enableCommand = ControlCommand.createForSetMode(streamEmg, streamImu, enableClassifier);
 	    
-	    writeControlCommand(address, enableCommand);
+	    writeControlCommand(enableCommand);
 	  }
 	  
 	  public void requestRssi(String address) {
@@ -119,13 +119,14 @@ public class MyoDevice extends BleGattCallback{
 	  
 	  public void notifyUserAction() {
 	    byte[] command = ControlCommand.createForUserAction();
-	    writeControlCommand(this.mAddress.toString(), command);
+	    writeControlCommand(command);
 	  }
 	  
 	  private void writeControlCommand(byte[] controlCommand) {
 	    UUID serviceUuid = GattConstants.CONTROL_SERVICE_UUID;
 	    UUID charUuid = GattConstants.COMMAND_CHAR_UUID;
 	    BGAPIPacket packet = new BGAPIPacket(controlCommand);
-	    this.mBleManager.getBleGatt().writeCharacteristic(address, serviceUuid, charUuid, controlCommand);
+	    //this.mBleManager.getBleGatt().writeCharacteristic(address, serviceUuid, charUuid, controlCommand);
+	    bgapi.send_attclient_prepare_write(connection, serviceUuid., charUuid, controlCommand);
 	  }
 }

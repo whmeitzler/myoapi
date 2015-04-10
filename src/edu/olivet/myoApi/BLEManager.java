@@ -69,7 +69,7 @@ public class BLEManager{
 	public void connect(BDAddr address){
 		bgapi.send_gap_connect_direct(address, 1, 0x3C, 0x3C, 0x64,0);
 	}
-	public void setDiscovery(boolean set){
+	public void scan(boolean set){
 		if(set){
 			bgapi.send_gap_set_scan_parameters(10, 250, 1);
 			bgapi.send_gap_discover(1);

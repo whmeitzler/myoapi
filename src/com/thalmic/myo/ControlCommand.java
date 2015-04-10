@@ -81,7 +81,7 @@ public abstract class ControlCommand { private static final byte COMMAND_SET_MOD
     private UserAction() {}
   }
   
-  static byte[] createForSetMode(EmgMode streamEmg, boolean streamImu, boolean enableClassifier) { byte emgMode = 0;
+  public static byte[] createForSetMode(EmgMode streamEmg, boolean streamImu, boolean enableClassifier) { byte emgMode = 0;
     switch (streamEmg) {
     case FV: 
       emgMode = 1;
