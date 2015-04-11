@@ -5,7 +5,8 @@ import org.thingml.bglib.gui.*;
 
 public class Main {
 	public static void main(String[] args) throws Throwable {
-		BGAPITransport trans = BLED112.connectBLED112("COM5");
+		//BLED112.getAvailableSerialPorts().stream().map(e -> e.getName()).forEach(System.out::println);
+		BGAPITransport trans = BLED112.connectBLED112("/dev/tty.usbmodem1");
 		try {
 			BGAPI api = new BGAPI(trans);
 			api.addListener(new BGAPIDefaultListener() {
