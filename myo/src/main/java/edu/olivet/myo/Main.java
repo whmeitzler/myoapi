@@ -27,7 +27,7 @@ public class Main {
 	        try {
 	            Thread.sleep(500);
 	        } catch (InterruptedException ex) { }
-	        System.out.println( "Requesting Version Number..." );
+	        System.out.println("Requesting Version Number...");
 			api.send_system_get_info();
 			api.send_system_hello();
 			api.send_gap_set_scan_parameters(10, 250, 1);
