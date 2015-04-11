@@ -6,7 +6,7 @@ import org.thingml.bglib.gui.*;
 public class Main {
 	public static void main(String[] args) throws Throwable {
 		//BLED112.getAvailableSerialPorts().stream().map(e -> e.getName()).forEach(System.out::println);
-		BGAPITransport trans = BLED112.connectBLED112("/dev/tty.usbmodem1");
+		BGAPITransport trans = BLED112.connectBLED112("COM5");//("/dev/tty.usbmodem1");
 		try {
 			BGAPI api = new BGAPI(trans);
 			api.addListener(new BGAPIDefaultListener() {
@@ -24,6 +24,36 @@ public class Main {
 			    public void receive_system_hello() {
 			        System.out.println("GOT HELLO!");
 			    }
+
+			    @Override
+				public void receive_attributes_write(int result) {
+			    	System.out.println("receive_attributes_write");
+			    }
+
+			    @Override
+				public void receive_attributes_read(int handle, int offset, int result, byte[] value) {
+			    	System.out.println("receive_attributes_read");
+			    }
+
+			    @Override
+				public void receive_attributes_read_type(int handle, int result, byte[] value) {
+			    	System.out.println("receive_attributes_read_type");
+			    }
+
+			    @Override
+				public void receive_attributes_user_response() {
+			    	System.out.println("receive_attributes_user_response");
+			    }
+
+			    @Override
+				public void receive_attributes_value(int connection, int reason, int handle, int offset, byte[] value) {
+			    	System.out.println("receive_attributes_value");
+			    }
+
+			    @Override
+				public void receive_attributes_user_request(int connection, int handle, int offset) {
+			    	System.out.println("receive_attributes_user_request");
+			    }
 			});
 	        try {
 	            Thread.sleep(500);
@@ -34,7 +64,7 @@ public class Main {
 			api.send_gap_set_scan_parameters(10, 250, 1);
 			api.send_gap_discover(1);
 	        try {
-	            Thread.sleep(5000);
+	            Thread.sleep(50000);
 	        } catch (InterruptedException ex) { }
 		} finally {
 			trans.stop();
