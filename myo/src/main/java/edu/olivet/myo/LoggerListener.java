@@ -81,16 +81,19 @@ public class LoggerListener implements BGAPIListener {
 				groupItr = null;
 				group = null;
 				state = IDLE;
-				System.out.println("hey");
-				//int atthandle = group.atts.get(new MaybeUUID("42 48 12 4a 7f 2c 48 47 b9 de 4 a9 4 1 6 d5"));
 				Group g = groups.get(new MaybeUUID(UUID.fromString("4248124a-7f2c-4847-b9de-04a9040006d5")));
-				int atthandle = g.atts.get(new MaybeUUID(UUID.fromString("4248124a-7f2c-4847-b9de-04a9040106d5")));
+				MaybeUUID command = new MaybeUUID(UUID.fromString("4248124a-7f2c-4847-b9de-04a9040106d5"));
+				int controlAtt = g.atts.get(command);
+				System.out.println("REQUESTING HANDLES");
+				api.send_attclient_read_by_group_type(connection, 1, Integer.MAX_VALUE, command.uuid);
+				api.send_attclient_read_by_type(connection, 1, Integer.MAX_VALUE, command.uuid);
+				
 				byte[] data = ControlCommand.createForVibrate(VibrationType.LONG);
-				System.out.println(Arrays.toString(data));
-				api.send_attclient_write_command(connection, atthandle, data);
-				api.send_attclient_attribute_write(connection, atthandle, data);
-				api.send_attclient_prepare_write(connection, atthandle, 0, data);
-				api.send_attclient_execute_write(connection, 1);
+//				api.send_attributes_write(handle, offset, value);
+//				api.send_attclient_write_command(connection, atthandle, ControlCommand.createForSetMode(EmgMode.FV, true, true));
+//				api.send_attclient_write_command(connection, atthandle, ControlCommand.createForUnlock(UnlockType.HOLD));
+ 				System.out.println(">>>>>>"+controlAtt);
+				api.send_attclient_write_command(connection, 39, data);
 				break;
 		}
 	}
@@ -111,8 +114,8 @@ public class LoggerListener implements BGAPIListener {
 	}
 
 	@Override
-	public void receive_attclient_read_by_group_type(int arg0, int arg1) {
-		System.out.println("receive_attclient_read_by_group_type(" + arg0 + ", " + arg1 + ")");
+	public void receive_attclient_read_by_group_type(int connection, int result) {
+		System.out.println("receive_attclient_read_by_group_type(" + connection + ", " + result + ")");
 	}
 
 	@Override
@@ -132,6 +135,7 @@ public class LoggerListener implements BGAPIListener {
 
 	@Override
 	public void receive_attclient_find_information(int arg0, int arg1) {
+		//TODO
 		System.out.println("receive_attclient_find_information(" + arg0 + ", " + arg1 + ")");
 	}
 
@@ -257,7 +261,7 @@ public class LoggerListener implements BGAPIListener {
 
 	@Override
 	public void receive_attclient_group_found(int connection, int start, int end, byte[] uuid) {
-		System.out.println("receive_attclient_group_found(" + connection + ", " + start + ", " + end + ", " + new MaybeUUID(uuid) + ")");
+		System.out.println(">>>receive_attclient_group_found(" + connection + ", " + start + ", " + end + ", " + new MaybeUUID(uuid) + ")");
 		MaybeUUID m = new MaybeUUID(uuid);
 		groups.put(m, new Group(start, end, m));
 	}
@@ -275,6 +279,7 @@ public class LoggerListener implements BGAPIListener {
 	@Override
 	public void receive_connection_disconnected(int arg0, int arg1) {
 		System.out.println("receive_connection_disconnected(" + arg0 + ", " + arg1 + ")");
+		System.exit(0);//TODO: remove this!
 	}
 
 	@Override
